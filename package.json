@@ -1,7 +1,7 @@
 {
-  "name": "safe-string-id",
+  "name": "web-id",
   "version": "1.0.0",
-  "description": "Convert a string into a web safe id attribute.",
+  "description": "Convert strings into web-usable ids.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
