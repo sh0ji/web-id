@@ -45,8 +45,7 @@ class WebId {
     }
 
     get iterated() {
-        if (this[Iterated] === this.safe) this.iterate();
-        return this[Iterated];
+        return this[Iterated] || this.safe;
     }
 
     get iter() {
