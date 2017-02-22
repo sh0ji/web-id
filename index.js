@@ -13,7 +13,7 @@ const Delimiter = Symbol('delimiter');
 
 class WebId {
     constructor(string) {
-        assert(typeof str === 'string', `Expected a string. Received ${typeof str}.`);
+        assert(typeof string === 'string', `Expected a string. Received ${typeof string}.`);
         this.delimiter = DefaultDelimiter;
         this.original = string;
     }
