@@ -4,7 +4,8 @@
   "description": "Convert strings into web-usable ids.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "browserify index.js > dist/web-id.js -t [ babelify --presets [ es2015 ] ] -s WebId",
+    "minify": "browserify -g uglifyify index.js > dist/web-id.min.js -t [ babelify --presets [ es2015 ] ] -s WebId"
   },
   "repository": {
     "type": "git",
@@ -16,6 +17,12 @@
     "url": "https://github.com/sh0ji/safe-string-id/issues"
   },
   "homepage": "https://github.com/sh0ji/safe-string-id#readme",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.22.0",
+    "babelify": "^7.3.0",
+    "browserify": "^14.0.0",
+    "uglifyify": "^3.0.4"
+  },
   "dependencies": {
     "lodash": "^4.17.4"
   }
