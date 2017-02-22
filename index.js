@@ -101,8 +101,5 @@ class WebId {
             .slice(0, len);
     }
 }
-const myId = new WebId('1. This café is _so_ cliché!');
-myId.delimiter = '~';
-console.log(myId.safe);
 
 module.exports = WebId;
