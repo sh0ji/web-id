@@ -97,7 +97,7 @@ class WebId {
     }
 
     generateUnique(str) {
-        if (!this.id) this.generate(str);
+        if (!this[Id]) this.generate(str);
         this[Unique] = this.id + this.delimiter + shortid.generate();
         return this.unique;
     }
