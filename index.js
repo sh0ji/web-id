@@ -1,5 +1,5 @@
 const assert = require('assert');
-const crypto = require('crypto');
+const shortid = require('shortid');
 const trim = require('lodash/fp/trim');
 const deburr = require('lodash/fp/deburr');
 const compose = require('lodash/fp/compose');
@@ -53,7 +53,7 @@ class WebId {
     }
 
     get unique() {
-        return this.safe + this.delimiter + WebId.randomHex(12);
+        return this.safe + this.delimiter + shortid.generate();
     }
 
     iterate() {
@@ -69,11 +69,11 @@ class WebId {
         return this;
     }
 
-    static safeUnique(str) {
-        return WebId.webSafe(str) + DefaultDelimiter + WebId.randomHex(12);
+    static generateUnique(str) {
+        return WebId.generate(str) + DefaultDelimiter + shortid.generate();
     }
 
-    static webSafe(str) {
+    static generate(str) {
         assert(typeof str === 'string', `Expected a string. Received ${typeof str}.`);
         /**
          * Run lodash functions (compose goes in reverse order):
@@ -88,16 +88,9 @@ class WebId {
         )(str);
 
         /** 5. ensure that it starts with a character */
-        newStr = newStr.replace(/^[^a-z]+/g, '');
+        newStr = newStr.replace(/^[^a-z]+/g, 'webid');
 
         return newStr;
-    }
-
-    static randomHex(len) {
-        assert(typeof str === 'number', `Expected a number. Received ${typeof str}.`);
-        return crypto.randomBytes(Math.ceil(len / 2))
-            .toString('hex')
-            .slice(0, len);
     }
 }
 

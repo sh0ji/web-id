@@ -24,6 +24,7 @@
     "uglifyify": "^3.0.4"
   },
   "dependencies": {
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "shortid": "^2.2.8"
   }
 }
