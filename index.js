@@ -7,15 +7,18 @@ const kebabCase = require('lodash/fp/kebabCase');
 const lowerCase = require('lodash/fp/lowerCase');
 
 const DefaultDelimiter = '-';
+const DefaultPrefix = '';
 
-const Iterated = Symbol('iterated');
 const Delimiter = Symbol('delimiter');
+const Id = Symbol('id');
+const Iterated = Symbol('iterated');
+const Prefix = Symbol('prefix');
+const Unique = Symbol('unique');
 
 class WebId {
-    constructor(string) {
-        assert(typeof string === 'string', `Expected a string. Received ${typeof string}.`);
+    constructor() {
         this.delimiter = DefaultDelimiter;
-        this.original = string;
+        this.prefix = DefaultPrefix;
     }
 
     get delimiter() {
@@ -37,23 +40,31 @@ class WebId {
         return this;
     }
 
-    get safe() {
-        const str = WebId.webSafe(this.original)
-            .split(DefaultDelimiter).join(this.delimiter);
-        this[Iterated] = str;
-        return str;
+    get id() {
+        /** always force the delimiter and prefix on retrieval */
+        const id = this[Id].split(DefaultDelimiter).join(this.delimiter);
+        return (this.prefix) ? this.prefix + this.delimiter + id : id;
     }
 
     get iterated() {
-        return this[Iterated] || this.safe;
+        return this[Iterated] || this.id;
     }
 
     get iter() {
         return this.iterated;
     }
 
+    get prefix() {
+        return this[Prefix];
+    }
+
+    set prefix(value) {
+        this[Prefix] = WebId.cleanString(value);
+        return this;
+    }
+
     get unique() {
-        return this.safe + this.delimiter + shortid.generate();
+        return this[Unique] || this.generateUnique(this.original);
     }
 
     iterate() {
@@ -69,29 +80,44 @@ class WebId {
         return this;
     }
 
-    static generateUnique(str) {
-        return WebId.generate(str) + DefaultDelimiter + shortid.generate();
+    generate(str) {
+        assert(typeof str === 'string', `Expected a string. Received ${typeof str}.`);
+
+        /** store the original */
+        this.original = str;
+
+        /** perform string functions and ensure that it starts with a character */
+        this[Id] = WebId.cleanString(str).replace(/^[^a-z]+/g, '');
+
+        /** initialize the iterated id as the normal id */
+        this[Iterated] = this.id;
+
+        /** return the getter, which prefixes and delimits automatically */
+        return this.id;
     }
 
-    static generate(str) {
-        assert(typeof str === 'string', `Expected a string. Received ${typeof str}.`);
+    generateUnique(str) {
+        if (!this.id) this.generate(str);
+        this[Unique] = this.id + this.delimiter + shortid.generate();
+        return this.unique;
+    }
+
+    static cleanString(str) {
         /**
          * Run lodash functions (compose goes in reverse order):
          * 1. trim, 2. lowerCase, 3. deburr, 4. kebabCase
          * kebabCase will delimit with a hyphen
          */
-        let newStr = compose(
+        return compose(
             kebabCase,
             deburr,
             lowerCase,
             trim
         )(str);
-
-        /** 5. ensure that it starts with a character */
-        newStr = newStr.replace(/^[^a-z]+/g, 'webid');
-
-        return newStr;
     }
 }
 
-module.exports = WebId;
+const inst = new WebId();
+inst.WebId = WebId;
+
+module.exports = inst;
