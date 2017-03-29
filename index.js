@@ -11,14 +11,14 @@ const DefaultPrefix = '';
 
 const Delimiter = Symbol('delimiter');
 const Id = Symbol('id');
-const Iterated = Symbol('iterated');
+const Iterator = Symbol('iterator');
 const Prefix = Symbol('prefix');
 const Unique = Symbol('unique');
 
 class WebId {
-    constructor() {
-        this.delimiter = DefaultDelimiter;
-        this.prefix = DefaultPrefix;
+    constructor(opts = {}) {
+        this.delimiter = opts.delimiter || DefaultDelimiter;
+        this.prefix = opts.prefix || DefaultPrefix;
     }
 
     get delimiter() {
@@ -47,7 +47,7 @@ class WebId {
     }
 
     get iterated() {
-        return this[Iterated] || this.id;
+        return `${this.id}-${this[Iterator]}`;
     }
 
     get iter() {
@@ -68,15 +68,7 @@ class WebId {
     }
 
     iterate() {
-        const arr = this[Iterated].split(this.delimiter);
-        const last = arr[arr.length - 1];
-        let newNum = 1;
-        if (Number(last)) {
-            arr.pop();
-            newNum = Number(last) + 1;
-        }
-        arr.push(newNum);
-        this[Iterated] = arr.join(this.delimiter);
+        this[Iterator] += 1;
         return this;
     }
 
@@ -89,15 +81,15 @@ class WebId {
         /** perform string functions and ensure that it starts with a character */
         this[Id] = WebId.cleanString(str).replace(/^[^a-z]+/g, '');
 
-        /** initialize the iterated id as the normal id */
-        this[Iterated] = this.id;
+        /** initialize the iterator */
+        this[Iterator] = 0;
 
         /** return the getter, which prefixes and delimits automatically */
         return this.id;
     }
 
     generateUnique(str) {
-        if (!this[Id]) this.generate(str);
+        this.generate(str);
         this[Unique] = this.id + this.delimiter + shortid.generate();
         return this.unique;
     }
@@ -117,7 +109,4 @@ class WebId {
     }
 }
 
-const inst = new WebId();
-inst.WebId = WebId;
-
-module.exports = inst;
+module.exports = WebId;

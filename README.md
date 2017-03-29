@@ -6,14 +6,15 @@ Convert strings into web-usable ids.
 $ npm install web-id
 ```
 ```javascript
-const webid = require('web-id');
+const WebId = require('web-id');
+const webid = new WebId({
+    prefix: 'wid'
+});
 const myId = webid.generate('1. László Čapek had déjà vu in the Åland Islands');
-// laszlo-capek-had-deja-vu-in-the-aland-islands
+// wid-laszlo-capek-had-deja-vu-in-the-aland-islands
 ```
 
 ### Properties
-Once generated, the webid instance will contain various properties.
-
 `.original` - The original, unaltered string.
 
 `.id` - The web safe id.
@@ -30,7 +31,7 @@ webid.id;                // laszlo_capek_had_deja_vu_in_the_aland_islands
 webid.delimiter = '&';   // assertion error
 ```
 
-`.prefix` - Set a prefix for the id. Prefixes are run through `webid.safeString();`
+`.prefix` - Set a prefix for the id. Prefixes are run through `WebId.cleanString();`
 ```javascript
 webid.prefix = 'myId';
 webid.id;                // my-id-laszlo-capek-had-deja-vu-in-the-aland-islands
@@ -64,15 +65,8 @@ webid.generateUnique('1. László Čapek had déjà vu in the Åland Islands');
 // laszlo-capek-had-deja-vu-in-the-aland-islands-ryoBZht3l
 ```
 
-`.WebId()` - Reference the WebId class.
+`WebId.cleanString(str)` (**static**) - An intermediary cleanup step that runs lodash functions: [trim](https://lodash.com/docs/latest#trim), [lowerCase](https://lodash.com/docs/latest#lowerCase), [deburr](https://lodash.com/docs/latest#deburr), and [kebabCase](https://lodash.com/docs/latest#kebabCase).
 ```javascript
-const webid = require('web-id');
-const newInstance = new webid.WebId();
-// newInstance.constructor === webid.constructor
-```
-
-`.cleanString(str)` (**static**) - An intermediary cleanup step that runs lodash functions: [trim](https://lodash.com/docs/latest#trim), [lowerCase](https://lodash.com/docs/latest#lowerCase), [deburr](https://lodash.com/docs/latest#deburr), and [kebabCase](https://lodash.com/docs/latest#kebabCase).
-```javascript
-webid.WebId.cleanString('1. László Čapek had déjà vu in the Åland Islands');
+WebId.cleanString('1. László Čapek had déjà vu in the Åland Islands');
 // 1-laszlo-capek-had-deja-vu-in-the-aland-islands
 ```
