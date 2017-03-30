@@ -47,11 +47,15 @@ class WebId {
     }
 
     get iterated() {
-        return (this[Iterator] !== 0) ? `${this.id}-${this[Iterator]}` : this.id;
+        return (this.iterator !== 0) ? `${this.id}-${this.iterator}` : this.id;
     }
 
     get iter() {
         return this.iterated;
+    }
+
+    get iterator() {
+        return this[Iterator];
     }
 
     get prefix() {
