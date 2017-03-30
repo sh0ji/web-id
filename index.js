@@ -47,7 +47,7 @@ class WebId {
     }
 
     get iterated() {
-        return `${this.id}-${this[Iterator]}`;
+        return (this[Iterator] !== 0) ? `${this.id}-${this[Iterator]}` : this.id;
     }
 
     get iter() {
