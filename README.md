@@ -41,16 +41,20 @@ webid.id;                // my-id-laszlo-capek-had-deja-vu-in-the-aland-islands
 webid.iterated           // laszlo-capek-had-deja-vu-in-the-aland-islands-1
 ```
 
+`.iterator` - Get the current iterator (init = 0).
+
 `.unique` - Get the web safe id with a [shortid](https://github.com/dylang/shortid) appended to the end.
 ```javascript
 webid.unique             // laszlo-capek-had-deja-vu-in-the-aland-islands-r1yb6dtne
 ```
 
 ### Methods
-`.iterate()` - iterate the id. Retrieve the iterated id with the `.iterated` or `.iter` getters. Chainable.
+`.iterate()` - increment the internal iterator. Retrieve the current iterator with `.iterator`. Retrieve the iterated id with the `.iterated` or `.iter` getters. `.id` will remain untouched.
 ```javascript
-webid.iterate().iterated // laszlo-capek-had-deja-vu-in-the-aland-islands-1
-webid.iter               // laszlo-capek-had-deja-vu-in-the-aland-islands-1
+for (let i = 0; i < 5; i += 1) {
+    webid.iterate();
+}
+webid.iterated;          // laszlo-capek-had-deja-vu-in-the-aland-islands-5
 ```
 
 `.generate(str)` - Generate a web id.
