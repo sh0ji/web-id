@@ -41,6 +41,7 @@ class WebId {
     }
 
     get id() {
+        if (!this[Id]) return null;
         /** always force the delimiter and prefix on retrieval */
         const id = this[Id].split(DefaultDelimiter).join(this.delimiter);
         return (this.prefix) ? this.prefix + this.delimiter + id : id;
@@ -93,8 +94,16 @@ class WebId {
     }
 
     generateUnique(str) {
-        this.generate(str);
-        this[Unique] = this.id + this.delimiter + shortid.generate();
+        let unique = shortid.generate();
+        if (str) {
+            this.generate(str);
+            unique = this.id + this.delimiter + unique;
+        } else if (this.id) {
+            unique = this.id + this.delimiter + unique;
+        } else if (this.prefix) {
+            unique = this.prefix + this.delimiter + unique;
+        }
+        this[Unique] = unique;
         return this.unique;
     }
 

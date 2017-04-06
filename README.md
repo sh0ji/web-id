@@ -68,6 +68,11 @@ webid.generate('1. László Čapek had déjà vu in the Åland Islands');
 webid.generateUnique('1. László Čapek had déjà vu in the Åland Islands');
 // laszlo-capek-had-deja-vu-in-the-aland-islands-ryoBZht3l
 ```
+If the `str` parameter is omitted, it will just return the shortid.
+```javascript
+webid.generateUnique();
+// rya3hx4px
+```
 
 `WebId.cleanString(str)` (**static**) - An intermediary cleanup step that runs lodash functions: [trim](https://lodash.com/docs/latest#trim), [lowerCase](https://lodash.com/docs/latest#lowerCase), [deburr](https://lodash.com/docs/latest#deburr), and [kebabCase](https://lodash.com/docs/latest#kebabCase).
 ```javascript
