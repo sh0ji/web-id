@@ -2,7 +2,7 @@
   "name": "web-id",
   "version": "1.1.5",
   "description": "Convert strings into web-usable ids.",
-  "main": "index.js",
+  "main": "dist/web-id.js",
   "scripts": {
     "build": "browserify index.js > dist/web-id.js -t [ babelify --presets [ es2015 ] ] -s WebId",
     "minify": "browserify -g uglifyify index.js > dist/web-id.min.js -t [ babelify --presets [ es2015 ] ] -s WebId",
