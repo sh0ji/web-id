@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "browserify index.js > dist/web-id.js -t [ babelify --presets [ es2015 ] ] -s WebId",
-    "minify": "browserify -g uglifyify index.js > dist/web-id.min.js -t [ babelify --presets [ es2015 ] ] -s WebId"
+    "minify": "browserify -g uglifyify index.js > dist/web-id.min.js -t [ babelify --presets [ es2015 ] ] -s WebId",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
