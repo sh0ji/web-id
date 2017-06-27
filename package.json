@@ -2,11 +2,10 @@
   "name": "web-id",
   "version": "1.1.6",
   "description": "Convert strings into web-usable ids.",
-  "main": "dist/web-id.js",
+  "main": "dist/web-id.min.js",
   "scripts": {
-    "build": "browserify index.js > dist/web-id.js -t [ babelify --presets [ es2015 ] ] -s WebId",
-    "minify": "browserify -g uglifyify index.js > dist/web-id.min.js -t [ babelify --presets [ es2015 ] ] -s WebId",
-    "prepublish": "npm run build"
+    "build": "browserify index.js --transform [ babelify --presets [ es2015 ] ] --global-transform=uglifyify --standalone WebId | derequire > dist/web-id.min.js",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -22,6 +21,7 @@
     "babel-preset-es2015": "^6.22.0",
     "babelify": "^7.3.0",
     "browserify": "^14.0.0",
+    "derequire": "^2.0.6",
     "uglifyify": "^3.0.4"
   },
   "dependencies": {
