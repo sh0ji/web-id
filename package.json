@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sh0ji/safe-string-id.git"
+    "url": "git+https://github.com/sh0ji/web-id.git"
   },
   "author": "Evan Yamanishi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sh0ji/safe-string-id/issues"
+    "url": "https://github.com/sh0ji/web-id/issues"
   },
-  "homepage": "https://github.com/sh0ji/safe-string-id#readme",
+  "homepage": "https://github.com/sh0ji/web-id#readme",
   "devDependencies": {
     "babel-preset-es2015": "^6.22.0",
     "babelify": "^7.3.0",
