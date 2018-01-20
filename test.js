@@ -1,11 +1,13 @@
 import test from 'ava';
 import webid from './dist/webid.cjs';
 
+/** @todo import this from ./src/constants.js once ava updates @babel/core */
 const DefaultOptions = {
 	delimiter: '-',
 	lower: true,
 	maxLength: 128,
 	remove: null,
+	strict: true,
 };
 const testStr = '1. László Čapek ♥ déjà vu in the Åland Islands';
 
@@ -21,13 +23,17 @@ test('generates an id with defaults', (t) => {
 	t.is(webid.generate(testStr), 'laszlo-capek-love-deja-vu-in-the-aland-islands');
 });
 
-test('sets a valid prefix', (t) => {
+test('generates an id in non-strict mode', (t) => {
+	t.is(webid.generate(testStr, { strict: false }), '1.-laszlo-capek-love-deja-vu-in-the-aland-islands');
+});
+
+test('sets a valid prefix in strict mode', (t) => {
 	webid.prefix = 'wid';
 	t.is(webid.prefix, 'wid-');
 	t.is(webid.generate(testStr), 'wid-laszlo-capek-love-deja-vu-in-the-aland-islands');
 });
 
-test('errors on prefix that doesn\'t begin with a letter', (t) => {
+test('errors on prefix that doesn\'t begin with a letter in strict mode', (t) => {
 	const error = t.throws(() => {
 		webid.prefix = '123';
 	});
@@ -43,23 +49,40 @@ test('errors on non-string prefix', (t) => {
 	t.is(error.name, 'TypeError');
 });
 
-test('sets a valid suffix', (t) => {
+test('sets a valid suffix in strict mode', (t) => {
 	webid.suffix = 'wid';
 	t.is(webid.suffix, '-wid');
 	t.is(webid.generate(testStr), 'laszlo-capek-love-deja-vu-in-the-aland-islands-wid');
 });
 
-test('sets a valid delimiter', (t) => {
+test('sets a valid delimiter in strict mode', (t) => {
 	webid.delimiter = '_';
 	t.is(webid.delimiter, '_');
 	t.is(webid.generate(testStr), 'laszlo_capek_love_deja_vu_in_the_aland_islands');
 });
 
-test('sets an invalid delimiter', (t) => {
+test('sets an invalid delimiter in strict mode', (t) => {
 	const error = t.throws(() => {
-		webid.delimiter = '🦄';
+		webid.delimiter = '🕺🏽';
 	});
-	t.is(error.message, '🦄 is not a safe delimiter.');
+	t.is(error.message, '🕺🏽 is not a safe delimiter.');
+});
+
+test('sets a valid delimiter in non-strict mode', (t) => {
+	webid.configure({
+		strict: false,
+		delimiter: '🕺🏽',
+	});
+	t.is(webid.delimiter, '🕺🏽');
+	t.is(webid.generate(testStr), '1.🕺🏽laszlo🕺🏽capek🕺🏽love🕺🏽deja🕺🏽vu🕺🏽in🕺🏽the🕺🏽aland🕺🏽islands');
+});
+
+test('sets an invalid delimiter in non-strict mode', (t) => {
+	webid.configure({ strict: false });
+	const error = t.throws(() => {
+		webid.delimiter = '\t';
+	});
+	t.is(error.message, 'The delimiter cannot be a space.');
 });
 
 test('adds a prefix and suffix via options', (t) => {
