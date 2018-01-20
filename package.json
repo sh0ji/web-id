@@ -4,11 +4,11 @@
   "description": "Convert strings into web-usable ids.",
   "main": "dist/webid.cjs.js",
   "scripts": {
-    "build": "gulp compile",
+    "build": "gulp",
     "lint": "eslint .",
     "prepublishOnly": "npm run build",
     "report": "nyc report --reporter=html",
-    "test": "nyc ava",
+    "test": "gulp test",
     "ava": "ava"
   },
   "repository": {
@@ -32,6 +32,7 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
     "gulp": "^4.0.0",
+    "gulp-ava": "^0.18.0",
     "nyc": "^11.4.1",
     "rollup": "^0.54.0",
     "rollup-plugin-babel": "^4.0.0-beta.0",
