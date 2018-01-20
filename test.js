@@ -93,6 +93,15 @@ test('adds a prefix and suffix via options', (t) => {
 	t.is(webid.generate(testStr, opts), 'wid-pre-laszlo-capek-love-deja-vu-in-the-aland-islands-wid-suf');
 });
 
+test('use alias options', (t) => {
+	const opts = {
+		pre: 'wid-pre',
+		suf: 'wid-suf',
+		delim: '_',
+	};
+	t.is(webid.generate(testStr, opts), 'wid_pre_laszlo_capek_love_deja_vu_in_the_aland_islands_wid_suf');
+});
+
 test('generates a unique id every time', (t) => {
 	const unique1 = webid.generateUnique(testStr);
 	const unique2 = webid.generateUnique(testStr);
