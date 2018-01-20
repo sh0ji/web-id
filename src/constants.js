@@ -3,6 +3,7 @@ export const DefaultOptions = {
 	lower: true,
 	maxLength: 128,
 	remove: null,
+	strict: true,
 };
 
 export const Private = {
@@ -16,9 +17,13 @@ export const Errors = {
 		assertion: typeof str === 'string',
 		error: new TypeError(`Expected a string. Received ${typeof str}.`),
 	}),
-	SAFE_DELIMITER: value => ({
+	STRICT_DELIMITER: value => ({
 		assertion: /^[\w-._~]*$/.test(value),
 		error: new Error(`${value} is not a safe delimiter.`),
+	}),
+	NON_STRICT_DELIMITER: value => ({
+		assertion: /^\S*$/g.test(value),
+		error: new Error('The delimiter cannot be a space.'),
 	}),
 	VALID_PREFIX: value => ({
 		assertion: /^[a-z]+/i.test(value),
