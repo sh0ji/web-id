@@ -1,69 +1,33 @@
 # web-id
-Convert strings into web-usable ids.
+[![GitHub issues](https://img.shields.io/npm/v/web-id.svg)](https://www.npmjs.com/package/web-id) [![Build Status](https://travis-ci.org/sh0ji/web-id.svg?branch=master)](https://travis-ci.org/sh0ji/web-id) [![dependencies Status](https://david-dm.org/sh0ji/web-id/status.svg)](https://david-dm.org/sh0ji/web-id)
+> Convert strings into web-usable ids.
+
+Similar to [slugify](https://github.com/simov/slugify), but with two additions:
+1. `strict` mode by default. This ensures that the ids work in HTML 4 or XHTML environments.
+2. Adds a method to increase the entropy of your id via [shortid](https://github.com/dylang/shortid).
 
 ## Usage
+Install it in your project.
 ```sh
-$ npm install web-id
+npm install web-id
 ```
+Require it and start using it.
 ```javascript
-const WebId = require('web-id');
-const webid = new WebId({
-    prefix: 'wid'
-});
+const webid = require('web-id');
+
 const myId = webid.generate('1. László Čapek had déjà vu in the Åland Islands');
-// wid-laszlo-capek-had-deja-vu-in-the-aland-islands
+// laszlo-capek-had-deja-vu-in-the-aland-islands
 ```
 
-### Properties
-`.original` - The original, unaltered string.
-
-`.id` - The web safe id.
+## API
+`.generate(str[, options])` - Returns the id.
 ```javascript
-webid.id;                // laszlo-capek-had-deja-vu-in-the-aland-islands
-```
-
-`.delimiter` or `.delim` - Get or set the current delimiter. Default is `-`.
-Note that only unreserved characters are allowed: ALPHA / DIGIT / '-' / '.' / '_' / '~'.
-```javascript
-webid.delimiter          // -
-webid.delimiter = '_';   // set the delimiter to _
-webid.id;                // laszlo_capek_had_deja_vu_in_the_aland_islands
-webid.delimiter = '&';   // assertion error
-```
-
-`.prefix` - Set a prefix for the id. Prefixes are run through `WebId.cleanString();`
-```javascript
-webid.prefix = 'myId';
-webid.id;                // my-id-laszlo-capek-had-deja-vu-in-the-aland-islands
-
-`.iterated` or `.iter` - Get the iterated id (see the `.iterate()` method).
-```javascript
-webid.iterated           // laszlo-capek-had-deja-vu-in-the-aland-islands-1
-```
-
-`.iterator` - Get the current iterator (init = 0).
-
-`.unique` - Get the web safe id with a [shortid](https://github.com/dylang/shortid) appended to the end.
-```javascript
-webid.unique             // laszlo-capek-had-deja-vu-in-the-aland-islands-r1yb6dtne
-```
-
-### Methods
-`.iterate()` - increment the internal iterator. Retrieve the current iterator with `.iterator`. Retrieve the iterated id with the `.iterated` or `.iter` getters. `.id` will remain untouched.
-```javascript
-for (let i = 0; i < 5; i += 1) {
-    webid.iterate();
-}
-webid.iterated;          // laszlo-capek-had-deja-vu-in-the-aland-islands-5
-```
-
-`.generate(str)` - Generate a web id.
-```
 webid.generate('1. László Čapek had déjà vu in the Åland Islands');
 // laszlo-capek-had-deja-vu-in-the-aland-islands
 ```
 
-`.generateUnique(str)` - (re)generate a unique id by appending a [shortid](https://github.com/dylang/shortid) to the `.id`.
+`.generateUnique(str[, options])` - Returns a unique(ish) id by appending a [shortid](https://github.com/dylang/shortid).
+Note that the `shortid` is appended to the id, but _before_ the `suffix` if it exists.
 ```javascript
 webid.generateUnique('1. László Čapek had déjà vu in the Åland Islands');
 // laszlo-capek-had-deja-vu-in-the-aland-islands-ryoBZht3l
@@ -74,8 +38,49 @@ webid.generateUnique();
 // rya3hx4px
 ```
 
-`WebId.cleanString(str)` (**static**) - An intermediary cleanup step that runs lodash functions: [trim](https://lodash.com/docs/latest#trim), [lowerCase](https://lodash.com/docs/latest#lowerCase), [deburr](https://lodash.com/docs/latest#deburr), and [kebabCase](https://lodash.com/docs/latest#kebabCase).
+`.parse(str[, options])` - Returns the internal webid object.
 ```javascript
-WebId.cleanString('1. László Čapek had déjà vu in the Åland Islands');
-// 1-laszlo-capek-had-deja-vu-in-the-aland-islands
+webid.parse('1. László Čapek had déjà vu in the Åland Islands');
+// {
+// 	id: 'laszlo-capek-love-deja-vu-in-the-aland-islands',
+// 	unique: 'laszlo-capek-love-deja-vu-in-the-aland-islands-ryxOaGbHz',
+// 	original: '1. László Čapek ♥ déjà vu in the Åland Islands',
+// 	slug: 'laszlo-capek-love-deja-vu-in-the-aland-islands',
+// 	shortid: 'ryxOaGbHz',
+// 	delimiter: '-',
+// 	prefix: '',
+// 	suffix: '',
+// }
 ```
+
+`.configure([options])` - Helper for setting the options. See below.
+
+
+## Options
+Options can be set at any time with the `.configure([options])` method, by using the setters, or during one of the methods. For example, all of the following are equivalent:
+```javascript
+webid.configure({ prefix: 'wid' });
+webid.prefix = 'wid';
+webid.generate('1. László Čapek had déjà vu in the Åland Islands', { prefix: 'wid' });
+// wid-laszlo-capek-had-deja-vu-in-the-aland-islands
+```
+
+Options include:
+`delimiter` (alias: `delim`) | Type: `string` | Default: `-` - Replace spaces with a delimiter.  
+In strict mode, only unreserved characters are allowed: ALPHA / DIGIT / '-' / '.' / '\_' / '~'.
+
+`prefix` (alias: `pre`) | Type: `string` - Set a prefix for the id.  
+In strict mode, the prefix must start with a letter (`/^[a-z]+/i`).
+
+`suffix` (alias: `suf`) | Type: `string` - Set a suffix for the id.
+
+`maxLength` | Type: `number` | Default: `128` - Set a max length for the string.  
+This is applied to the final string, keeping any set `prefix` and/or `suffix` intact.
+
+`strict` | Type: `boolean` | Default: `true` - Turn on/off strict mode.
+
+`lower` | Type: `boolean` | Default: `true` - Cast everything to lowercase.
+Applied by [slugify](https://github.com/simov/slugify#options).
+
+`remove` | Type: `regex` | Default: `null` - Specify characters to remove.
+Applied by [slugify](https://github.com/simov/slugify#options).
