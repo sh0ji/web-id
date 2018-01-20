@@ -105,3 +105,8 @@ test('generate with options', (t) => {
 	});
 	t.is(unique.replace(/([\s\S]*?)(_)/g, '').length, 10);
 });
+
+test('generate a shortid when no string is given', (t) => {
+	const webidObj = webid.parse();
+	t.is(webidObj.id, webidObj.shortid);
+});
