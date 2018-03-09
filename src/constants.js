@@ -1,3 +1,9 @@
+export const getCharacters = (delimiter) => {
+	const standard = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_';
+	const replacement = '~';
+	return standard.replace(delimiter, replacement);
+};
+
 export const DefaultOptions = {
 	delimiter: '-',
 	lower: true,

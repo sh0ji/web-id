@@ -88,6 +88,7 @@ class WebId {
 		const options = (typeof _str === 'object') ? _str : _options;
 		if (options) this.configure(options);
 		const slug = this.createSlug(str);
+		short.characters(getCharacters(this.delimiter));
 		const shortid = short.generate();
 		const maxLength = this.options.maxLength - this.prefix.length - this.suffix.length;
 		const uniqueSlug = [slug.substr(0, maxLength - shortid.length), shortid]
