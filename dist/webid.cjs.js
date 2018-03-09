@@ -1,5 +1,5 @@
 /*!
-  * WebId v1.1.6 (https://github.com/sh0ji/web-id#readme)
+  * WebId v2.0.0-rc.0 (https://github.com/sh0ji/web-id#readme)
   * Copyright 2018 Evan Yamanishi
   */
 'use strict';
@@ -27,6 +27,11 @@ function _extends() {
   return _extends.apply(this, arguments);
 }
 
+const getCharacters = delimiter => {
+  const standard = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_';
+  const replacement = '~';
+  return standard.replace(delimiter, replacement);
+};
 const DefaultOptions = {
   delimiter: '-',
   lower: true,
@@ -102,7 +107,7 @@ class WebId {
 
     Assertions.TYPE_IS_STRING(value);
     if (this.options.strict) Assertions.VALID_PREFIX(value);
-    let prefix = this.createSlug(value.trim());
+    let prefix = this.createSlug(value.trim(), null);
 
     if (prefix && !prefix.endsWith(this.delimiter)) {
       prefix += this.delimiter;
@@ -122,7 +127,7 @@ class WebId {
     }
 
     Assertions.TYPE_IS_STRING(value);
-    let suffix = this.createSlug(value.trim());
+    let suffix = this.createSlug(value.trim(), null);
 
     if (suffix && !suffix.startsWith(this.delimiter)) {
       suffix = this.delimiter + suffix;
@@ -131,22 +136,22 @@ class WebId {
     Private.suffix.set(this, suffix);
   }
 
-  get slugifyOpts() {
+  slugifyOpts(replacement) {
     return {
-      replacement: this.delimiter,
+      replacement,
       remove: this.options.remove,
       lower: this.options.lower
     };
   }
 
-  createSlug(str) {
-    const slug = str ? slugify(str, this.slugifyOpts) : '';
+  createSlug(str, delim = this.delimiter) {
+    const slug = str ? slugify(str, this.slugifyOpts(delim)) : '';
 
     if (this.options.strict) {
       /** enable strict mode (html 4 / xhtml) */
       return slug
       /** allowed characters: a-z, A-Z, 0-9, _, :, ., - */
-      .replace(/[^\w:.-]/ig, this.delimiter)
+      .replace(/[^\w_:.-]/ig, this.delimiter)
       /** must start with letter */
       .replace(/^[^a-z]+/, '');
     }
@@ -161,12 +166,15 @@ class WebId {
     this.suffix = this.options.suf || this.options.suffix;
   }
 
-  parse(str, options) {
+  parse(_str, _options) {
+    const str = typeof _str === 'string' ? _str : '';
+    const options = typeof _str === 'object' ? _str : _options;
     if (options) this.configure(options);
     const slug = this.createSlug(str);
+    short.characters(getCharacters(this.delimiter));
     const shortid = short.generate();
     const maxLength = this.options.maxLength - this.prefix.length - this.suffix.length;
-    const uniqueSlug = [slug.substr(0, maxLength - shortid.length), shortid].join(this.delimiter);
+    const uniqueSlug = slug ? [slug.substr(0, maxLength - shortid.length), shortid].join(this.delimiter) : shortid;
     return {
       id: this.prefix + (slug.substr(0, maxLength) || shortid) + this.suffix,
       unique: this.prefix + uniqueSlug + this.suffix,

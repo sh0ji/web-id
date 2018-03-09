@@ -1,5 +1,5 @@
 /*!
-  * WebId v1.1.6 (https://github.com/sh0ji/web-id#readme)
+  * WebId v2.0.0-rc.0 (https://github.com/sh0ji/web-id#readme)
   * Copyright 2018 Evan Yamanishi
   */
 (function (global, factory) {
@@ -7,6 +7,24 @@
 	typeof define === 'function' && define.amd ? define(factory) :
 	(factory());
 }(this, (function () { 'use strict';
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
 
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -591,24 +609,11 @@ var slugify = createCommonjsModule(function (module, exports) {
 }));
 });
 
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-
+const getCharacters = delimiter => {
+  const standard = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_';
+  const replacement = '~';
+  return standard.replace(delimiter, replacement);
+};
 const DefaultOptions = {
   delimiter: '-',
   lower: true,
@@ -684,7 +689,7 @@ class WebId {
 
     Assertions.TYPE_IS_STRING(value);
     if (this.options.strict) Assertions.VALID_PREFIX(value);
-    let prefix = this.createSlug(value.trim());
+    let prefix = this.createSlug(value.trim(), null);
 
     if (prefix && !prefix.endsWith(this.delimiter)) {
       prefix += this.delimiter;
@@ -704,7 +709,7 @@ class WebId {
     }
 
     Assertions.TYPE_IS_STRING(value);
-    let suffix = this.createSlug(value.trim());
+    let suffix = this.createSlug(value.trim(), null);
 
     if (suffix && !suffix.startsWith(this.delimiter)) {
       suffix = this.delimiter + suffix;
@@ -713,22 +718,22 @@ class WebId {
     Private.suffix.set(this, suffix);
   }
 
-  get slugifyOpts() {
+  slugifyOpts(replacement) {
     return {
-      replacement: this.delimiter,
+      replacement,
       remove: this.options.remove,
       lower: this.options.lower
     };
   }
 
-  createSlug(str) {
-    const slug = str ? slugify(str, this.slugifyOpts) : '';
+  createSlug(str, delim = this.delimiter) {
+    const slug = str ? slugify(str, this.slugifyOpts(delim)) : '';
 
     if (this.options.strict) {
       /** enable strict mode (html 4 / xhtml) */
       return slug
       /** allowed characters: a-z, A-Z, 0-9, _, :, ., - */
-      .replace(/[^\w:.-]/ig, this.delimiter)
+      .replace(/[^\w_:.-]/ig, this.delimiter)
       /** must start with letter */
       .replace(/^[^a-z]+/, '');
     }
@@ -743,12 +748,15 @@ class WebId {
     this.suffix = this.options.suf || this.options.suffix;
   }
 
-  parse(str, options) {
+  parse(_str, _options) {
+    const str = typeof _str === 'string' ? _str : '';
+    const options = typeof _str === 'object' ? _str : _options;
     if (options) this.configure(options);
     const slug = this.createSlug(str);
+    shortid.characters(getCharacters(this.delimiter));
     const shortid$$1 = shortid.generate();
     const maxLength = this.options.maxLength - this.prefix.length - this.suffix.length;
-    const uniqueSlug = [slug.substr(0, maxLength - shortid$$1.length), shortid$$1].join(this.delimiter);
+    const uniqueSlug = slug ? [slug.substr(0, maxLength - shortid$$1.length), shortid$$1].join(this.delimiter) : shortid$$1;
     return {
       id: this.prefix + (slug.substr(0, maxLength) || shortid$$1) + this.suffix,
       unique: this.prefix + uniqueSlug + this.suffix,
