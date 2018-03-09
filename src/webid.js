@@ -31,7 +31,7 @@ class WebId {
 		}
 		Assertions.TYPE_IS_STRING(value);
 		if (this.options.strict) Assertions.VALID_PREFIX(value);
-		let prefix = this.createSlug(value.trim());
+		let prefix = this.createSlug(value.trim(), null);
 		if (prefix && !prefix.endsWith(this.delimiter)) {
 			prefix += this.delimiter;
 		}
@@ -48,28 +48,28 @@ class WebId {
 			return;
 		}
 		Assertions.TYPE_IS_STRING(value);
-		let suffix = this.createSlug(value.trim());
+		let suffix = this.createSlug(value.trim(), null);
 		if (suffix && !suffix.startsWith(this.delimiter)) {
 			suffix = this.delimiter + suffix;
 		}
 		Private.suffix.set(this, suffix);
 	}
 
-	get slugifyOpts() {
+	slugifyOpts(replacement) {
 		return {
-			replacement: this.delimiter,
+			replacement,
 			remove: this.options.remove,
 			lower: this.options.lower,
 		};
 	}
 
-	createSlug(str) {
-		const slug = (str) ? slugify(str, this.slugifyOpts) : '';
+	createSlug(str, delim = this.delimiter) {
+		const slug = (str) ? slugify(str, this.slugifyOpts(delim)) : '';
 		if (this.options.strict) {
 			/** enable strict mode (html 4 / xhtml) */
 			return slug
 				/** allowed characters: a-z, A-Z, 0-9, _, :, ., - */
-				.replace(/[^\w:.-]/ig, this.delimiter)
+				.replace(/[^\w_:.-]/ig, this.delimiter)
 				/** must start with letter */
 				.replace(/^[^a-z]+/, '');
 		}
