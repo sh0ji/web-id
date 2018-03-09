@@ -83,7 +83,9 @@ class WebId {
 		this.suffix = this.options.suf || this.options.suffix;
 	}
 
-	parse(str, options) {
+	parse(_str, _options) {
+		const str = (typeof _str === 'string') ? _str : '';
+		const options = (typeof _str === 'object') ? _str : _options;
 		if (options) this.configure(options);
 		const slug = this.createSlug(str);
 		const shortid = short.generate();
