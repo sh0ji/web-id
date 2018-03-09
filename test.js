@@ -23,7 +23,36 @@ test('generates an id with defaults', (t) => {
 	t.is(webid.generate(testStr), 'laszlo-capek-love-deja-vu-in-the-aland-islands');
 });
 
-test('generates an id in non-strict mode', (t) => {
+test('#generate with no arguments', (t) => {
+	const id = webid.generate();
+	t.true(typeof id === 'string');
+	t.true(id.length >= 7);
+	t.true(id.length <= 14);
+});
+
+test('#generate with options, but no string', (t) => {
+	const id = webid.generate({ prefix: 'wid' });
+	t.true(typeof id === 'string');
+	t.true(id.startsWith('wid-'));
+	t.true(id.length >= 11);
+});
+
+test('#generateUnique with no arguments', (t) => {
+	const id = webid.generateUnique();
+	t.true(typeof id === 'string');
+	t.true(id.length >= 7);
+	t.true(id.length <= 14);
+	t.false(id.includes('-'));
+});
+
+test('#generateUnique with options, but no string', (t) => {
+	const id = webid.generateUnique({ prefix: 'wid' });
+	t.true(typeof id === 'string');
+	t.true(id.startsWith('wid-'));
+	t.true(id.length >= 11);
+});
+
+test('#generate in non-strict mode', (t) => {
 	t.is(webid.generate(testStr, { strict: false }), '1.-laszlo-capek-love-deja-vu-in-the-aland-islands');
 });
 
@@ -61,14 +90,14 @@ test('sets a valid delimiter in strict mode', (t) => {
 	t.is(webid.generate(testStr), 'laszlo_capek_love_deja_vu_in_the_aland_islands');
 });
 
-test('sets an invalid delimiter in strict mode', (t) => {
+test('errors on an invalid delimiter in strict mode', (t) => {
 	const error = t.throws(() => {
 		webid.delimiter = '🕺🏽';
 	});
 	t.is(error.message, '🕺🏽 is not a safe delimiter.');
 });
 
-test('sets a valid delimiter in non-strict mode', (t) => {
+test('allows an invalid delimiter in non-strict mode', (t) => {
 	webid.configure({
 		strict: false,
 		delimiter: '🕺🏽',
@@ -99,7 +128,7 @@ test('use alias options', (t) => {
 		suf: 'wid-suf',
 		delim: '_',
 	};
-	t.is(webid.generate(testStr, opts), 'wid_pre_laszlo_capek_love_deja_vu_in_the_aland_islands_wid_suf');
+	t.is(webid.generate(testStr, opts), 'wid-pre_laszlo_capek_love_deja_vu_in_the_aland_islands_wid-suf');
 });
 
 test('generates a unique id every time', (t) => {
@@ -108,14 +137,20 @@ test('generates a unique id every time', (t) => {
 	t.not(unique1, unique2);
 });
 
-test('generate with options', (t) => {
+test('generate# with string and options', (t) => {
 	const unique = webid.generateUnique(testStr, {
 		delimiter: '_',
 	});
-	t.is(unique.replace(/([\s\S]*?)(_)/g, '').length, 10);
+	const underscores = unique.match(/_/g);
+	t.true(underscores.length >= 9);
 });
 
-test('generate a shortid when no string is given', (t) => {
+test('id and shortid are the same when no string is given', (t) => {
 	const webidObj = webid.parse();
 	t.is(webidObj.id, webidObj.shortid);
+});
+
+test('shortid does not contain the delimiter character', (t) => {
+	const webidObj = webid.parse();
+	t.false(webidObj.shortid.includes(webid.delimiter));
 });
