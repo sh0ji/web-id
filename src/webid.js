@@ -1,6 +1,6 @@
 import short from 'shortid';
 import slugify from 'slugify';
-import { DefaultOptions, Private, Assertions } from './constants';
+import { getCharacters, DefaultOptions, Private, Assertions } from './constants';
 
 class WebId {
 	constructor(opts = {}) {
