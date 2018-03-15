@@ -1,5 +1,5 @@
 /*!
-  * WebId v2.0.0-rc.0 (https://github.com/sh0ji/web-id#readme)
+  * WebId v2.0.0 (https://github.com/sh0ji/web-id#readme)
   * Copyright 2018 Evan Yamanishi
   */
 'use strict';
@@ -29,15 +29,16 @@ function _extends() {
 
 const getCharacters = delimiter => {
   const standard = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_';
-  const replacement = '~';
-  return standard.replace(delimiter, replacement);
+  const replacement = delimiter === '~' ? '-' : '~';
+  return delimiter ? standard.replace(delimiter, replacement) : standard;
 };
 const DefaultOptions = {
   delimiter: '-',
   lower: true,
   maxLength: 128,
   remove: null,
-  strict: true
+  strict: true,
+  delimiterInShortid: true
 };
 const Private = {
   delimiter: new WeakMap(),
@@ -171,7 +172,7 @@ class WebId {
     const options = typeof _str === 'object' ? _str : _options;
     if (options) this.configure(options);
     const slug = this.createSlug(str);
-    short.characters(getCharacters(this.delimiter));
+    short.characters(getCharacters(!this.options.delimiterInShortid ? this.delimiter : null));
     const shortid = short.generate();
     const maxLength = this.options.maxLength - this.prefix.length - this.suffix.length;
     const uniqueSlug = slug ? [slug.substr(0, maxLength - shortid.length), shortid].join(this.delimiter) : shortid;
