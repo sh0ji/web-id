@@ -1,7 +1,7 @@
 export const getCharacters = (delimiter) => {
 	const standard = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_';
-	const replacement = '~';
-	return standard.replace(delimiter, replacement);
+	const replacement = (delimiter === '~') ? '-' : '~';
+	return (delimiter) ? standard.replace(delimiter, replacement) : standard;
 };
 
 export const DefaultOptions = {
@@ -10,6 +10,7 @@ export const DefaultOptions = {
 	maxLength: 128,
 	remove: null,
 	strict: true,
+	delimiterInShortid: true,
 };
 
 export const Private = {

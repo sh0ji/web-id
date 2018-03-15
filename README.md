@@ -107,3 +107,7 @@ Cast everything to lowercase. Applied by [slugify](https://github.com/simov/slug
 ### `remove`
 Type: `regex` | Default: `null`  
 Specify characters to remove. Applied by [slugify](https://github.com/simov/slugify#options).
+
+### `delimiterInShortid`
+Type: `boolean` | Default: `true`
+Whether the delimiter will be included in the shortid.
