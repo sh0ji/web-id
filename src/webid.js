@@ -1,6 +1,8 @@
 import short from 'shortid';
 import slugify from 'slugify';
-import { getCharacters, DefaultOptions, Private, Assertions } from './constants';
+import {
+	getCharacters, DefaultOptions, Private, Assertions,
+} from './constants';
 
 class WebId {
 	constructor(opts = {}) {
@@ -91,9 +93,9 @@ class WebId {
 		short.characters(getCharacters((!this.options.delimiterInShortid) ? this.delimiter : null));
 		const shortid = short.generate();
 		const maxLength = this.options.maxLength - this.prefix.length - this.suffix.length;
-		const uniqueSlug = (slug) ?
-			[slug.substr(0, maxLength - shortid.length), shortid].join(this.delimiter) :
-			shortid;
+		const uniqueSlug = (slug)
+			? [slug.substr(0, maxLength - shortid.length), shortid].join(this.delimiter)
+			: shortid;
 		return {
 			id: this.prefix + (slug.substr(0, maxLength) || shortid) + this.suffix,
 			unique: this.prefix + uniqueSlug + this.suffix,

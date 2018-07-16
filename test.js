@@ -1,9 +1,10 @@
 import test from 'ava';
-import webid from './dist/webid.cjs';
+import webid from './dist/webid';
 
 /** @todo import this from ./src/constants.js once ava updates @babel/core */
 const DefaultOptions = {
 	delimiter: '-',
+	delimiterInShortid: false,
 	lower: true,
 	maxLength: 128,
 	remove: null,
