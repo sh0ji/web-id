@@ -1,6 +1,6 @@
 {
   "name": "web-id",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Convert strings into web-usable ids.",
   "browser": "dist/webid.browser.js",
   "main": "dist/webid.js",
