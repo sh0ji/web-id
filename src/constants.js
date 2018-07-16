@@ -6,11 +6,11 @@ export const getCharacters = (delimiter) => {
 
 export const DefaultOptions = {
 	delimiter: '-',
+	delimiterInShortid: false,
 	lower: true,
 	maxLength: 128,
 	remove: null,
 	strict: true,
-	delimiterInShortid: true,
 };
 
 export const Private = {
