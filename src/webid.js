@@ -1,10 +1,13 @@
 import short from 'shortid';
 import slugify from 'slugify';
 import {
-	getCharacters, DefaultOptions, Private, Assertions,
+	getCharacters,
+	DefaultOptions,
+	Private,
+	Assertions,
 } from './constants';
 
-class WebId {
+export default class WebId {
 	constructor(opts = {}) {
 		this.configure(opts);
 	}
@@ -116,5 +119,3 @@ class WebId {
 		return this.parse(str, options).unique;
 	}
 }
-
-module.exports = new WebId();
