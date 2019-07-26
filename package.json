@@ -3,8 +3,9 @@
   "version": "2.0.0-rc.1",
   "description": "Convert strings into web-usable ids.",
   "main": "dist/webid.cjs.js",
+  "browser": "dist/webid.umd.js",
   "scripts": {
-    "build": "gulp",
+    "build": "rollup --config",
     "lint": "eslint .",
     "prepublishOnly": "npm run build",
     "report": "nyc report --reporter=html",
@@ -16,7 +17,10 @@
     "type": "git",
     "url": "git+https://github.com/sh0ji/web-id.git"
   },
-  "author": "Evan Yamanishi",
+  "author": {
+    "name": "Evan Yamanishi",
+    "email": "yamanishi1@gmail.com"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/sh0ji/web-id/issues"
@@ -24,10 +28,9 @@
   "homepage": "https://github.com/sh0ji/web-id#readme",
   "devDependencies": {
     "@babel/core": "^7.5.5",
-    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "@babel/register": "^7.5.5",
+    "@babel/runtime": "^7.5.5",
     "ava": "^0.24.0",
+    "babel-preset-airbnb": "^4.0.1",
     "coveralls": "^3.0.5",
     "del": "^3.0.0",
     "eslint": "^4.18.2",
@@ -40,8 +43,9 @@
     "rollup-plugin-babel": "^4.0.0-beta.2",
     "rollup-plugin-commonjs": "^10.0.1",
     "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-globals": "^1.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0"
+    "rollup-plugin-node-globals": "^1.4.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.1.1"
   },
   "dependencies": {
     "shortid": "^2.2.14",
