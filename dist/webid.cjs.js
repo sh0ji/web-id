@@ -1,7 +1,9 @@
-/*!
-  * WebId v2.0.0-rc.0 (https://github.com/sh0ji/web-id#readme)
-  * Copyright 2018 Evan Yamanishi
-  */
+/***
+ * WebId v2.0.0-rc.1 (https://github.com/sh0ji/web-id#readme)
+ * Built for Node.js
+ * Copyright 2017-2019 Evan Yamanishi
+ * Licensed under MIT
+ ***/
 'use strict';
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
@@ -9,23 +11,22 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var short = _interopDefault(require('shortid'));
 var slugify = _interopDefault(require('slugify'));
 
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
 
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
+  return obj;
 }
+
+var defineProperty = _defineProperty;
 
 const getCharacters = delimiter => {
   const standard = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_';
@@ -47,11 +48,11 @@ const Private = {
 const Errors = {
   TYPE_IS_STRING: str => ({
     assertion: typeof str === 'string',
-    error: new TypeError(`Expected a string. Received ${typeof str}.`)
+    error: new TypeError("Expected a string. Received ".concat(typeof str, "."))
   }),
   STRICT_DELIMITER: value => ({
     assertion: /^[\w-._~]*$/.test(value),
-    error: new Error(`${value} is not a safe delimiter.`)
+    error: new Error("".concat(value, " is not a safe delimiter."))
   }),
   NON_STRICT_DELIMITER: value => ({
     assertion: /^\S*$/g.test(value),
@@ -76,6 +77,9 @@ const Assertions = (() => {
   return obj;
 })();
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 class WebId {
   constructor(opts = {}) {
     this.configure(opts);
@@ -160,7 +164,7 @@ class WebId {
   }
 
   configure(opts = {}) {
-    this.options = _extends({}, DefaultOptions, opts);
+    this.options = _objectSpread({}, DefaultOptions, {}, opts);
     this.delimiter = this.options.delim || this.options.delimiter;
     this.prefix = this.options.pre || this.options.prefix;
     this.suffix = this.options.suf || this.options.suffix;
@@ -197,5 +201,5 @@ class WebId {
 
 }
 
-module.exports = new WebId();
+module.exports = WebId;
 //# sourceMappingURL=webid.cjs.js.map
