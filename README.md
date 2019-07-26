@@ -68,14 +68,14 @@ Returns the internal webid object.
 ```javascript
 webid.parse("1. László Čapek had déjà vu in the Åland Islands");
 // {
-// 	id: 'laszlo-capek-love-deja-vu-in-the-aland-islands',
-// 	unique: 'laszlo-capek-love-deja-vu-in-the-aland-islands-ryxOaGbHz',
-// 	original: '1. László Čapek ♥ déjà vu in the Åland Islands',
-// 	slug: 'laszlo-capek-love-deja-vu-in-the-aland-islands',
-// 	shortid: 'ryxOaGbHz',
-// 	delimiter: '-',
-// 	prefix: '',
-// 	suffix: '',
+//   id: 'laszlo-capek-love-deja-vu-in-the-aland-islands',
+//   unique: 'laszlo-capek-love-deja-vu-in-the-aland-islands-ryxOaGbHz',
+//   original: '1. László Čapek ♥ déjà vu in the Åland Islands',
+//   slug: 'laszlo-capek-love-deja-vu-in-the-aland-islands',
+//   shortid: 'ryxOaGbHz',
+//   delimiter: '-',
+//   prefix: '',
+//   suffix: '',
 // }
 ```
 
@@ -91,7 +91,7 @@ Options can be set at any time with the `.configure([options])` method, by using
 webid.configure({ prefix: "wid" });
 webid.prefix = "wid";
 webid.generate("1. László Čapek had déjà vu in the Åland Islands", {
-	prefix: "wid"
+  prefix: "wid"
 });
 // wid-laszlo-capek-had-deja-vu-in-the-aland-islands
 ```
