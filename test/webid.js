@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import test from 'ava';
 import WebId from '../dist/webid.cjs';
 
@@ -12,7 +13,7 @@ const DefaultOptions = {
 const testStr = '1. László Čapek ♥ déjà vu in the Åland Islands';
 
 test.beforeEach('reset options to default', (t) => {
-	t.context.webid = new WebId();	// eslint-disable-line
+	t.context.webid = new WebId();
 });
 
 test('uses default options when none are provided', (t) => {
