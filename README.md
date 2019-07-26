@@ -20,13 +20,18 @@ npm install web-id
 Require it and start using it.
 
 ```javascript
-const webid = require("web-id");
+const WebId = require("web-id");
+
+// create a new instance
+const webid = new WebId();
 
 const myId = webid.generate("1. László Čapek had déjà vu in the Åland Islands");
 // laszlo-capek-had-deja-vu-in-the-aland-islands
 ```
 
 ## API
+
+All of the following are instance methods that are available after creating a `new WebId()`.
 
 ### `.generate(str[, options])`
 
