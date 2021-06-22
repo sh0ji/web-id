@@ -1,3 +1,5 @@
+This repository has been archived because it does not provide significant enough benefit over simpler solutions, such as [slugify](https://github.com/simov/slugify).
+
 # web-id
 
 [![GitHub issues](https://img.shields.io/npm/v/web-id.svg)](https://www.npmjs.com/package/web-id) [![Build Status](https://travis-ci.org/sh0ji/web-id.svg?branch=master)](https://travis-ci.org/sh0ji/web-id) [![Coverage Status](https://coveralls.io/repos/github/sh0ji/web-id/badge.svg?branch=2.0)](https://coveralls.io/github/sh0ji/web-id) [![dependencies Status](https://david-dm.org/sh0ji/web-id/status.svg)](https://david-dm.org/sh0ji/web-id)
